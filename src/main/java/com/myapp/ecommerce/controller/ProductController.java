@@ -3,6 +3,7 @@ package com.myapp.ecommerce.controller;
 import com.myapp.ecommerce.entity.Product;
 import com.myapp.ecommerce.service.ProductService;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class ProductController {
 
     // CREATE = Post method
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
+    public Product createProduct(@Valid @RequestBody Product product) {
         return productService.createProduct(product);
     }
 
@@ -40,7 +41,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public Product updateProduct(
             @PathVariable Long id,
-            @RequestBody Product product) {
+            @Valid @RequestBody Product product) {
         return productService.updateProduct(id, product);
     }
 
