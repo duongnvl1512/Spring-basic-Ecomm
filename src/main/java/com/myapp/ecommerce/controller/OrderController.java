@@ -5,6 +5,8 @@ import com.myapp.ecommerce.entity.CustomerOrder;
 import com.myapp.ecommerce.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/orders")
 @CrossOrigin("*")
@@ -20,5 +22,10 @@ public class OrderController {
     public CustomerOrder createOrder(
             @RequestBody CreateOrderRequest request) {
         return orderService.createOrder(request);
+    }
+
+    @GetMapping
+    public List<CustomerOrder> getAllOrders() {
+        return orderService.getAllOrders();
     }
 }

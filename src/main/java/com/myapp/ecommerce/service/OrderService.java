@@ -24,6 +24,10 @@ public class OrderService {
         this.productRepository = productRepository;
     }
 
+    public List<CustomerOrder> getAllOrders() {
+        return customerOrderRepository.findAll();
+    }
+
     public CustomerOrder createOrder(CreateOrderRequest request) {
 
         CustomerOrder order = new CustomerOrder();
