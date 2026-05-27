@@ -1,5 +1,6 @@
 package com.myapp.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class OrderItem {
 
     private Double price;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_id")
     private CustomerOrder order;
