@@ -27,6 +27,4 @@ public class Product {
 
     @Positive(message = "Stock quantity must be greater than 0")
     private Integer stockQuantity;
-
-    private String imageUrl;
 }
