@@ -4,32 +4,50 @@ const productTableBody = document.getElementById("productTableBody");
 const productForm = document.getElementById("productForm");
 const editProductForm = document.getElementById("editProductForm");
 
+let products = [];
+let allProducts = [];
+
 let editProductId = null;
 
+// sort
+let currentSort = {
+    field: null,
+    direction: "asc"
+};
 
 // Load products
 async function loadProducts() {
+    const response =
+        await fetch(API_URL);
 
-    const response = await fetch(API_URL);
+    products =
+        await response.json();
 
-    const products = await response.json();
+    allProducts = [...products];
+    renderProductsTable(products);
+}
+
+function renderProductsTable(products) {
 
     productTableBody.innerHTML = "";
 
     products.forEach(product => {
-
         productTableBody.innerHTML += `
+
             <tr>
                 <td>${product.id}</td>
                 <td>${product.name}</td>
-                <td>${product.price}</td>
+                <td class="description-column">
+                    ${product.price}
+                </td>
                 <td>${product.stockQuantity}</td>
+                <td>${product.description}</td>
                 <td>
                     <button 
                         class="btn btn-warning btn-sm"
                         onclick="editProduct(${product.id})"
                     >
-                    <i class="bi bi-pencil-square"></i>
+                        <i class="bi bi-pencil-square"></i>
                         Edit
                     </button>
 
@@ -37,10 +55,12 @@ async function loadProducts() {
                         class="btn btn-danger btn-sm"
                         onclick="deleteProduct(${product.id})"
                     >
-                    <i class="bi bi-trash"></i>
+                        <i class="bi bi-trash"></i>
                         Delete
                     </button>
+
                 </td>
+
             </tr>
         `;
     });
@@ -49,31 +69,22 @@ async function loadProducts() {
 async function addProduct() {
 
     const product = {
-
         name: document.getElementById("name").value,
-
         description: document.getElementById("description").value,
-
         price: document.getElementById("price").value,
-
         stockQuantity: document.getElementById("stockQuantity").value
     };
 
     try {
-
         const response = await fetch(API_URL, {
-
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify(product)
         });
 
         if (!response.ok) {
-
             throw new Error("Add product failed");
         }
 
@@ -81,16 +92,23 @@ async function addProduct() {
             "Product added successfully!",
             "success"
         );
-
+        clearAddProductForm();
         loadProducts();
 
     } catch (error) {
-
         showToast(
             "Failed to add product!",
             "danger"
         );
     }
+}
+
+//helper clear form
+function clearAddProductForm() {
+    document.getElementById("name").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("stockQuantity").value = "";
 }
 
 // Create product
@@ -164,20 +182,17 @@ function toggleAddProductForm() {
 // Delete product
 let deleteProductId = null;
 function deleteProduct(id) {
-
     deleteProductId = id;
 
     const modal = new bootstrap.Modal(
         document.getElementById("deleteModal")
     );
-
     modal.show();
 }
 
 async function confirmDeleteProduct() {
 
     try {
-
         const response = await fetch(
             `${API_URL}/${deleteProductId}`,
             {
@@ -186,7 +201,6 @@ async function confirmDeleteProduct() {
         );
 
         if (!response.ok) {
-
             throw new Error("Delete failed");
         }
 
@@ -200,11 +214,9 @@ async function confirmDeleteProduct() {
             "Product deleted successfully!",
             "success"
         );
-
         loadProducts();
 
     } catch (error) {
-
         showToast(
             "Failed to delete product!",
             "danger"
@@ -234,6 +246,71 @@ async function editProduct(id) {
     );
 
     modal.show();
+}
+
+// sort func
+function sortProducts(field) {
+    if (currentSort.field === field) {
+        currentSort.direction =
+            currentSort.direction === "asc"
+                ? "desc"
+                : "asc";
+    } else {
+        currentSort.field = field;
+        currentSort.direction = "asc";
+    }
+
+    products.sort((a, b) => {
+
+        let valueA = a[field];
+        let valueB = b[field];
+
+        // string compare
+        if (typeof valueA === "string") {
+
+            valueA = valueA.toLowerCase();
+            valueB = valueB.toLowerCase();
+
+            if (valueA < valueB) {
+                return currentSort.direction === "asc"
+                    ? -1
+                    : 1;
+            }
+
+            if (valueA > valueB) {
+                return currentSort.direction === "asc"
+                    ? 1
+                    : -1;
+            }
+            return 0;
+        }
+        // number compare
+        return currentSort.direction === "asc"
+            ? valueA - valueB
+            : valueB - valueA;
+    });
+
+    renderProductsTable(products);
+}
+
+function searchProducts() {
+
+    const keyword =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    products = allProducts.filter(product =>
+        product.name
+            .toLowerCase()
+            .includes(keyword)
+        ||
+        product.description
+            .toLowerCase()
+            .includes(keyword)
+    );
+
+    renderProductsTable(products);
 }
 
 loadProducts();

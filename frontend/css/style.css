@@ -105,3 +105,23 @@ body {
     border-bottom: 1px solid #eee;
     padding: 12px 0;
 }
+
+.table td {
+    vertical-align: middle;
+}
+
+.description-column {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+th {
+    cursor: pointer;
+    user-select: none;
+}
+
+th:hover {  
+    background-color: #f1f1f1;
+}

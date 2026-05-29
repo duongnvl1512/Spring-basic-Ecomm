@@ -1,8 +1,10 @@
 package com.myapp.ecommerce.controller;
 
 import com.myapp.ecommerce.dto.CreateOrderRequest;
+import com.myapp.ecommerce.dto.OrderDetail;
 import com.myapp.ecommerce.entity.CustomerOrder;
 import com.myapp.ecommerce.service.OrderService;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,5 +29,17 @@ public class OrderController {
     @GetMapping
     public List<CustomerOrder> getAllOrders() {
         return orderService.getAllOrders();
+    }
+
+    @GetMapping("/{id}")
+    public OrderDetail getOrder(@PathVariable Long id) {
+        return orderService.getOrderDetailById(id);
+    }
+
+    @PutMapping("/{id}/status")
+    public OrderDetail updateStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+        return orderService.updateStatus(id, status);
     }
 }
