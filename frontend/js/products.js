@@ -133,7 +133,6 @@ function renderCart() {
         `;
     });
 
-    // Thẻ hiển thị tổng giá trị giỏ hàng cao cấp
     html += `
     <div class="mt-4 p-3 bg-light rounded-3">
         <div class="d-flex justify-content-between align-items-center">
@@ -178,7 +177,7 @@ function removeFromCart(id) {
 // Place Order Action
 async function placeOrder() {
     if (cart.length === 0) {
-        showToast("Cart is empty!", "danger");
+        showToast("Your cart is empty! Please add some products first.", "danger");
         return;
     }
 
@@ -194,9 +193,9 @@ async function placeOrder() {
         }))
     };
 
-    // Kiểm tra tính hợp lệ của Form thông tin khách hàng trước khi gửi
+    // 2. Kiểm tra thông tin khách hàng nhập vào
     if (!order.customerName || !order.customerPhone) {
-        showToast("Please enter customer details!", "danger");
+        showToast("Please enter both Customer Name and Phone Number!", "warning");
         return;
     }
 
@@ -209,18 +208,20 @@ async function placeOrder() {
             body: JSON.stringify(order)
         });
 
-        if (!response.ok) throw new Error();
+        if (!response.ok) {
+            throw new Error("Server responded with an error");
+        }
 
-        showToast("Order placed successfully!", "success");
-        
-        // Reset form thông tin và giỏ hàng
+        showToast("Order placed successfully! Thank you for your purchase.", "success");
+
         customerNameInput.value = "";
         customerPhoneInput.value = "";
         cart = [];
         renderCart();
 
     } catch (error) {
-        showToast("Failed to place order!", "danger");
+        console.error("Order error:", error);
+        showToast("Failed to place order. Please try again later!", "danger");
     }
 }
 

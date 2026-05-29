@@ -1,24 +1,24 @@
 :root {
-  --primary-color: #EE3124; /* Red from the 7-Eleven logo's slash */
-  --secondary-color: #F58220; /* Orange from the 7-Eleven logo's background */
-  --background-color: #f1f1f1; /* Dark green from the 7-Eleven logo's text background */
-  --text-color-light: #ffffff; /* White for light text on dark backgrounds */
-  --text-color-dark: #212529; /* Dark gray for text on light backgrounds */
-  --hover-overlay: rgba(0, 0, 0, 0.05); /* Light gray for hover effects */
+  --primary-color: #EE3124;
+  --secondary-color: #F58220;
+  --background-color: #f1f1f1;
+  --text-color-light: #ffffff;
+  --text-color-dark: #212529;
+  --hover-overlay: rgba(0, 0, 0, 0.05);
 }
 
 body {
   margin: 0;
   background-color: var(--background-color);
   font-family: Arial, sans-serif;
-  color: var(--text-color-light); /* Set default text color to white for better contrast */
+  color: var(--text-color-light);
 }
 
 /* Navbar */
 .top-navbar {
   height: 70px;
   background: var(--secondary-color);
-  border-bottom: 1px solid rgba(221, 221, 221, 0.3); /* Slightly transparent border for a softer look */
+  border-bottom: 1px solid rgba(221, 221, 221, 0.3);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,7 +42,7 @@ body {
   color: var(--text-color-light);
   padding-top: 20px;
   flex-shrink: 0;
-  border-right: 1px solid rgba(221, 221, 221, 0.3); /* Softened right border */
+  border-right: 1px solid rgba(221, 221, 221, 0.3);
 }
 
 .sidebar a {
@@ -54,14 +54,14 @@ body {
 }
 
 .sidebar a:hover {
-  background: var(--hover-overlay); /* subtle hover effect within the same green background */
+  background: var(--hover-overlay);
 }
 
 /* Main Content */
 .main-content {
   flex: 1;
   padding: 24px;
-  color: var(--text-color-dark); /* text in main content should be dark for contrast with white cards and white-ish body bg */
+  color: var(--text-color-dark);
 }
 
 .add-product-form {
@@ -88,11 +88,11 @@ body {
   border: none;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  background-color: var(--text-color-light); /* white background for the form card */
+  background-color: var(--text-color-light); 
 }
 
 .cart-panel {
-  background: var(--text-color-light); /* white background for the cart panel card */
+  background: var(--text-color-light); 
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -102,7 +102,7 @@ body {
 
 .product-card {
   transition: 0.2s;
-  background-color: var(--text-color-light); /* white background for product cards */
+  background-color: var(--text-color-light); 
 }
 
 .product-card:hover {
@@ -135,7 +135,7 @@ th:hover {
 }
 
 .table-hover tbody tr:hover {
-  background-color: var(--hover-overlay); /* subtle hover effect with slight green hint */
+  background-color: var(--hover-overlay); 
 }
 
 th:hover .text-muted {
@@ -148,7 +148,7 @@ th:hover .text-muted {
 }
 
 .form-control:focus {
-  box-shadow: 0 0 0 0.25rem rgba(238, 49, 36, 0.15); /* orange-tinted focus shadow */
+  box-shadow: 0 0 0 0.25rem rgba(238, 49, 36, 0.15);
 }
 
 .sidebar.collapsed {

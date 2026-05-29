@@ -70,7 +70,6 @@ async function addProduct() {
         stockQuantity: Number(document.getElementById("stockQuantity").value)
     };
 
-    // Kiểm tra nhanh tính hợp lệ dữ liệu đầu vào
     if (!product.name || !product.price) {
         showToast("Please fill in Name and Price!", "danger");
         return;
@@ -251,5 +250,4 @@ function searchProducts() {
     renderProductsTable(products);
 }
 
-// Initialize application
 loadProducts();

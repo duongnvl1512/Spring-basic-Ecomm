@@ -13,7 +13,6 @@ async function loadOrders() {
         allOrders = [...orders];
         renderOrdersTable(orders);
         
-        // Cập nhật số lượng đơn hàng lên badge tiêu đề (nếu có thẻ này trên HTML)
         const countBadge = document.querySelector(".dynamic-order-count");
         if (countBadge) countBadge.innerText = `${orders.length} orders`;
     } catch (error) {
@@ -35,7 +34,6 @@ function renderOrdersTable(orders) {
         return;
     }
 
-    // Bọc bảng trong lớp table-responsive để chống tràn màn hình điện thoại
     let html = `
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
@@ -185,7 +183,6 @@ function renderOrderDetail(order) {
     }
 }
 
-// Render Status Badges Helper (Đã đồng bộ giao diện bo tròn cao cấp)
 function renderStatus(status) {
     const map = {
         PENDING: "bg-warning-subtle text-warning border border-warning-subtle",
@@ -217,7 +214,7 @@ async function updateOrderStatus(orderId) {
         const data = await res.json();
 
         renderOrderDetail(data);
-        loadOrders(); // Tải lại bảng tổng quan ở nền ngoài
+        loadOrders();
         showToast("Order status updated successfully!", "success");
 
     } catch (error) {
@@ -226,5 +223,4 @@ async function updateOrderStatus(orderId) {
     }
 }
 
-// Initial Launch
 loadOrders();
