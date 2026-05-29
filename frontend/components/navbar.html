@@ -1,82 +1,73 @@
-<nav class="top-navbar">
+<nav class="navbar top-navbar navbar-expand bg-white border-bottom sticky-top px-4 py-2">
+    <div class="container-fluid p-0 d-flex align-items-center justify-content-between">
+        
+        <h4 class="m-0 fw-bold text-dark text-truncate" style="max-width: 250px;">
+                <i class="bi bi-shop me-2 text-primary"></i>
+                <span>Ecommerce</span>
+        </h4>
 
-    <h3 class="m-0">
-        Ecommerce Admin
-    </h3>
+        <div class="d-flex align-items-center gap-3">
 
-    <div class="d-flex align-items-center gap-4">
-
-        <div class="input-group">
-            <span class="input-group-text">
-                <i class="bi bi-search"></i>
-            </span>
-
-            <input
-                type="text"
-                class="form-control"
-                placeholder="Search..."
-                style="width: 220px;"
-            >
-        </div>
-
-        <button
-            class="btn btn-light position-relative">
-
-            <i class="bi bi-bell fs-5"></i>
-            <span
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                3
-            </span>
-
-        </button>
-
-        <div class="dropdown">
-
-            <button
-                class="btn btn-light dropdown-toggle d-flex align-items-center gap-2"
-                data-bs-toggle="dropdown">
-
-                <img
-                    src="/frontend/assets/logo.png"
-                    class="rounded-circle"
-                    width="35"
-                    height="35"
-                >
-
-                <span>
-                    Admin
+            <div class="input-group search-box d-none d-md-flex">
+                <span class="input-group-text bg-light border-end-0 rounded-start-pill text-muted ps-3">
+                    <i class="bi bi-search"></i>
                 </span>
+                <input
+                    type="text"
+                    class="form-control bg-light border-start-0 rounded-end-pill py-2 pe-3"
+                    placeholder="Search anything..."
+                    style="width: 240px; font-size: 0.9rem;"
+                >
+            </div>
 
+            <button class="btn btn-icon btn-light position-relative rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                <i class="bi bi-bell text-secondary fs-5"></i>
+                <span class="position-absolute top-1 start-75 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.7rem; padding: 0.35em 0.5em;">
+                    3
+                </span>
             </button>
 
-            <ul class="dropdown-menu dropdown-menu-end">
+            <div class="dropdown">
+                <button
+                    class="btn btn-profile d-flex align-items-center gap-2 p-1 pe-2 rounded-pill"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    
+                    <img
+                        src="/frontend/assets/logo.png"
+                        class="rounded-circle object-fit-cover border border-2 border-white shadow-sm"
+                        width="36"
+                        height="36"
+                        alt="Admin Avatar"
+                    >
+                    <span class="fw-semibold text-dark d-none d-sm-inline" style="font-size: 0.95rem;">
+                        Admin
+                    </span>
+                    <i class="bi bi-chevron-down text-muted small d-none d-sm-inline"></i>
+                </button>
 
-                <li>
-                    <a class="dropdown-item" href="#">
-                        Profile
-                    </a>
-                </li>
-
-                <li>
-                    <a class="dropdown-item" href="#">
-                        Settings
-                    </a>
-                </li>
-
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-
-                <li>
-                    <a class="dropdown-item text-danger" href="#">
-                        Logout
-                    </a>
-                </li>
-
-            </ul>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 py-2 animate fade-in" style="min-width: 180px; border-radius: 12px;">
+                    <li class="px-3 py-1 text-muted small d-block d-sm-none border-bottom mb-1">Tài khoản: <strong>Admin</strong></li>
+                    <li>
+                        <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2" href="#">
+                            <i class="bi bi-person text-muted fs-5"></i> Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2" href="#">
+                            <i class="bi bi-gear text-muted fs-5"></i> Settings
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider my-2"></li>
+                    <li>
+                        <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2 text-danger" href="#">
+                            <i class="bi bi-box-arrow-right fs-5"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
         </div>
-
     </div>
-
 </nav>

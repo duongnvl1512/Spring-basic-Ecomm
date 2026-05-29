@@ -10,275 +10,154 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-
-<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-    <div class="container-fluid">
-
-        <a class="navbar-brand" href="#">
-            Ecommerce Admin
-        </a>
-
-        <div class="navbar-nav">
-
-            <a class="nav-link" href="admin-products.html">
-                Admin Products
-            </a>
-
-            <a class="nav-link" href="products.html">
-                Products
-            </a>
-
-            <a class="nav-link" href="orders.html">
-                Orders
-            </a>
-
-        </div>
-
-    </div>
-
-</nav> -->
-
-<!-- Navbar -->
 <div id="navbar-container"></div>
 
 <div class="wrapper">
 
-    <!-- Sidebar -->
     <div id="sidebar-container"></div>
 
-    <!-- Main Content -->
     <div class="main-content">
-
-    <h1 class="mb-4">Admin Product Management</h1>
-
-    <!-- Product Form -->
-    <!-- Toggle Button -->
-    <button
-        id="toggleAddFormBtn"
-        class="btn btn-primary"
-        onclick="toggleAddProductForm()">
-
-        <i class="fa-solid fa-plus"></i>
-        Add New Product
-
-    </button>
-
-<!-- Add Product Form -->
-<div
-    id="addProductFormContainer"
-    class="card p-4 mb-1 add-product-form">
-
-    <h4 class="">
-        Add Product
-    </h4>
-
-    <div class="mb-3">
-        <label>Name</label>
-        <input
-            type="text"
-            id="name"
-            class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label>Price</label>
-        <input
-            type="number"
-            id="price"
-            class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label>Description</label>
-        <textarea
-            id="description"
-            class="form-control"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label>Stock Quantity</label>
-        <input
-            type="number"
-            id="stockQuantity"
-            class="form-control">
-    </div>
-
-    <button
-        class="btn btn-success"
-        onclick="addProduct()">
-
-        <i class="fa-solid fa-floppy-disk"></i>
-        Save Product
-
-    </button>
-
-</div>
-
-    <!-- Product List -->
-    <div class="mt-1">
-
-        <h3>Products</h3>
-
-        <!-- Search -->
-        <input
-            type="text"
-            id="searchInput"
-            class="form-control w-25 mb-2"
-            placeholder="Search products..."
-            onkeyup="searchProducts()"
-        >
-
-        <table class="table table-bordered">
-
-            <thead>
-            <tr>
-                <th onclick="sortProducts('id')">ID</th>
-                <th onclick="sortProducts('name')">Name</th>
-                <th onclick="sortProducts('price')">Price</th>
-                <th onclick="sortProducts('stockQuantity')">Stock</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-
-            <tbody id="productTableBody">
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    </div>
-
-</div>
-
-<!-- Modal popup -->
-<!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1">
-
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-
-                <h5 class="modal-title">
-                    Edit Product
-                </h5>
-
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal">
+        
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 border-bottom pb-3">
+            <div>
+                <h1 class="h2 mb-1 text-dark fw-bold">Product Management</h1>
+                <p class="text-muted mb-0 small">Create, edit, and manage your ecommerce store products.</p>
+            </div>
+            <div>
+                <button id="toggleAddFormBtn" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 py-2 fw-semibold shadow-sm" onclick="toggleAddProductForm()">
+                    <i class="bi bi-plus-lg fs-5"></i>
+                    Add New Product
                 </button>
+            </div>
+        </div>
 
+        <div id="addProductFormContainer" class="card p-4 add-product-form">
+            <h4 class="mb-4 fw-bold text-secondary">
+                <i class="bi bi-plus-circle me-2"></i>Add Product
+            </h4>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-medium text-secondary">Product Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="Enter product name">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-medium text-secondary">Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" id="price" class="form-control" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-medium text-secondary">Stock Quantity</label>
+                    <input type="number" id="stockQuantity" class="form-control" placeholder="0">
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-medium text-secondary">Description</label>
+                    <textarea id="description" class="form-control" rows="3" placeholder="Enter product details..."></textarea>
+                </div>
+                <div class="col-12 text-end mt-3">
+                    <button class="btn btn-success d-inline-flex align-items-center gap-2 px-4 shadow-sm" onclick="addProduct()">
+                        <i class="bi bi-floppy"></i>
+                        Save Product
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-3 p-4">
+            
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
+                <h3 class="h5 mb-0 fw-bold text-dark">Products Directory</h3>
+                
+                <div class="input-group" style="max-width: 300px;">
+                    <span class="input-group-text bg-white border-end-0 text-muted">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Search products..." onkeyup="searchProducts()">
+                </div>
             </div>
 
-            <div class="modal-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-secondary">
+                        <tr>
+                            <th onclick="sortProducts('id')" style="width: 80px;">ID <i class="bi bi-arrow-down-up small ms-1 text-muted"></i></th>
+                            <th onclick="sortProducts('name')">Name <i class="bi bi-arrow-down-up small ms-1 text-muted"></i></th>
+                            <th onclick="sortProducts('price')">Price <i class="bi bi-arrow-down-up small ms-1 text-muted"></i></th>
+                            <th onclick="sortProducts('stockQuantity')">Stock <i class="bi bi-arrow-down-up small ms-1 text-muted"></i></th>
+                            <th>Description</th>
+                            <th class="text-end" style="width: 140px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        </tbody>
+                </table>
+            </div>
 
-                <form id="editProductForm">
+        </div>
 
-                    <div class="mb-3">
-                        <label>Name</label>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold text-dark">
+                    <i class="bi bi-pencil-square me-2 text-warning"></i>Edit Product
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="editProductForm" class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label fw-medium text-secondary">Name</label>
                         <input type="text" id="editName" class="form-control">
                     </div>
-
-                    <div class="mb-3">
-                        <label>Description</label>
-                        <input type="text" id="editDescription" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Price</label>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium text-secondary">Price</label>
                         <input type="number" step="any" id="editPrice" class="form-control">
                     </div>
-
-                    <div class="mb-3">
-                        <label>Stock Quantity</label>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium text-secondary">Stock Quantity</label>
                         <input type="number" id="editStockQuantity" class="form-control">
                     </div>
-
-                    <button type="submit" class="btn btn-warning">
-                        Update Product
-                    </button>
-                    
+                    <div class="col-12">
+                        <label class="form-label fw-medium text-secondary">Description</label>
+                        <textarea id="editDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="col-12 text-end mt-4">
+                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning px-4 fw-semibold text-dark">Update Product</button>
+                    </div>
                 </form>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
 
-<!-- Delete Confirm Modal -->
-
-<div
-    class="modal fade"
-    id="deleteModal"
-    tabindex="-1">
-
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-
-                <h5 class="modal-title">
-
-                    Confirm Delete
-
-                </h5>
-
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal">
-                </button>
-
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-body text-center p-4">
+                <div class="text-danger mb-3">
+                    <i class="bi bi-exclamation-triangle fs-1"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Confirm Delete</h5>
+                <p class="text-muted small mb-4">Are you sure you want to delete this product? Action cannot be undone.</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger px-3 d-inline-flex align-items-center gap-1" onclick="confirmDeleteProduct()">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                </div>
             </div>
-
-            <div class="modal-body">
-
-                Are you sure you want to delete this product?
-
-            </div>
-
-            <div class="modal-footer">
-
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal">
-
-                    Cancel
-
-                </button>
-
-                <button
-                    type="button"
-                    class="btn btn-danger"
-                    onclick="confirmDeleteProduct()">
-
-                    <i class="fa-solid fa-trash"></i>
-
-                    Delete
-
-                </button>
-
-            </div>
-
         </div>
-
     </div>
-
 </div>
 
-<!-- Toast notification -->
-<div id="toast-container"></div>
+<div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
 <script src="./js/components/loadComponents.js"></script>
 <script src="./js/admin-products.js"></script>

@@ -6,10 +6,9 @@ const editProductForm = document.getElementById("editProductForm");
 
 let products = [];
 let allProducts = [];
-
 let editProductId = null;
 
-// sort
+// Sort configuration
 let currentSort = {
     field: null,
     direction: "asc"
@@ -17,63 +16,65 @@ let currentSort = {
 
 // Load products
 async function loadProducts() {
-    const response =
-        await fetch(API_URL);
-
-    products =
-        await response.json();
-
-    allProducts = [...products];
-    renderProductsTable(products);
+    try {
+        const response = await fetch(API_URL);
+        products = await response.json();
+        allProducts = [...products];
+        renderProductsTable(products);
+    } catch (error) {
+        console.error("Error loading products:", error);
+    }
 }
 
+// Render Products Table
 function renderProductsTable(products) {
-
     productTableBody.innerHTML = "";
 
     products.forEach(product => {
         productTableBody.innerHTML += `
-
             <tr>
-                <td>${product.id}</td>
-                <td>${product.name}</td>
-                <td class="description-column">
-                    ${product.price}
-                </td>
-                <td>${product.stockQuantity}</td>
-                <td>${product.description}</td>
+                <td class="fw-bold">#${product.id}</td>
+                <td class="fw-semibold text-dark">${product.name}</td>
+                <td class="text-primary fw-medium">$${Number(product.price).toFixed(2)}</td>
                 <td>
+                    <span class="badge ${product.stockQuantity > 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'} rounded-pill px-2.5 py-1">
+                        ${product.stockQuantity} pcs
+                    </span>
+                </td>
+                <td class="description-column text-muted small">${product.description || 'No description'}</td>
+                <td class="text-end text-nowrap">
                     <button 
-                        class="btn btn-warning btn-sm"
+                        class="btn btn-outline-warning btn-sm me-1 d-inline-flex align-items-center gap-1"
                         onclick="editProduct(${product.id})"
                     >
-                        <i class="bi bi-pencil-square"></i>
-                        Edit
+                        <i class="bi bi-pencil-square"></i> Edit
                     </button>
-
                     <button 
-                        class="btn btn-danger btn-sm"
+                        class="btn btn-outline-danger btn-sm d-inline-flex align-items-center gap-1"
                         onclick="deleteProduct(${product.id})"
                     >
-                        <i class="bi bi-trash"></i>
-                        Delete
+                        <i class="bi bi-trash"></i> Delete
                     </button>
-
                 </td>
-
             </tr>
         `;
     });
 }
 
+// Add product
 async function addProduct() {
-
     const product = {
         name: document.getElementById("name").value,
         description: document.getElementById("description").value,
-        price: document.getElementById("price").value,
-        stockQuantity: document.getElementById("stockQuantity").value
+        price: Number(document.getElementById("price").value),
+        stockQuantity: Number(document.getElementById("stockQuantity").value)
     };
+
+    // Kiểm tra nhanh tính hợp lệ dữ liệu đầu vào
+    if (!product.name || !product.price) {
+        showToast("Please fill in Name and Price!", "danger");
+        return;
+    }
 
     try {
         const response = await fetch(API_URL, {
@@ -84,26 +85,21 @@ async function addProduct() {
             body: JSON.stringify(product)
         });
 
-        if (!response.ok) {
-            throw new Error("Add product failed");
-        }
+        if (!response.ok) throw new Error("Add product failed");
 
-        showToast(
-            "Product added successfully!",
-            "success"
-        );
+        showToast("Product added successfully!", "success");
         clearAddProductForm();
+        
+        // Tự đóng form sau khi lưu thành công (Nếu muốn)
+        toggleAddProductForm(); 
+        
         loadProducts();
-
     } catch (error) {
-        showToast(
-            "Failed to add product!",
-            "danger"
-        );
+        showToast("Failed to add product!", "danger");
     }
 }
 
-//helper clear form
+// Helper clear form
 function clearAddProductForm() {
     document.getElementById("name").value = "";
     document.getElementById("description").value = "";
@@ -111,206 +107,149 @@ function clearAddProductForm() {
     document.getElementById("stockQuantity").value = "";
 }
 
-// Create product
+// Update product listener
 editProductForm.addEventListener("submit", async (e) => {
-
     e.preventDefault();
 
     const product = {
-
         name: document.getElementById("editName").value,
-
         description: document.getElementById("editDescription").value,
-
         price: Number(document.getElementById("editPrice").value),
-
         stockQuantity: Number(document.getElementById("editStockQuantity").value)
     };
 
-    await fetch(`${API_URL}/${editProductId}`, {
+    try {
+        const response = await fetch(`${API_URL}/${editProductId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(product)
+        });
 
-        method: "PUT",
+        if (!response.ok) throw new Error("Update failed");
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+        const modalElement = document.getElementById("editModal");
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
 
-        body: JSON.stringify(product)
-    });
-
-    const modal = bootstrap.Modal.getInstance(
-        document.getElementById("editModal")
-    );
-
-    modal.hide();
-
-    loadProducts();
+        showToast("Product updated successfully!", "success");
+        loadProducts();
+    } catch (error) {
+        showToast("Failed to update product!", "danger");
+    }
 });
 
+// Toggle Add Form Button
 function toggleAddProductForm() {
-    const formContainer = document.getElementById(
-        "addProductFormContainer"
-    );
-
-    const toggleBtn = document.getElementById(
-        "toggleAddFormBtn"
-    );
+    const formContainer = document.getElementById("addProductFormContainer");
+    const toggleBtn = document.getElementById("toggleAddFormBtn");
 
     formContainer.classList.toggle("show");
-
     const isOpen = formContainer.classList.contains("show");
     
+    // Đã sửa: Chuyển đổi icon FontAwesome sang Bootstrap Icon đồng bộ
     if (isOpen) {
         toggleBtn.innerHTML = `
-            <i class="fa-solid fa-minus"></i>
+            <i class="bi bi-x-lg"></i>
             Close Form
         `;
-
-        toggleBtn.classList.remove("btn-primary");
-        toggleBtn.classList.add("btn-danger");
+        toggleBtn.classList.replace("btn-primary", "btn-danger");
     } else {
         toggleBtn.innerHTML = `
-            <i class="fa-solid fa-plus"></i>
+            <i class="bi bi-plus-lg"></i>
             Add New Product
         `;
-
-        toggleBtn.classList.remove("btn-danger");
-        toggleBtn.classList.add("btn-primary");
+        toggleBtn.classList.replace("btn-danger", "btn-primary");
     }
 }
 
-// Delete product
+// Open Delete Modal Confirmation
 let deleteProductId = null;
 function deleteProduct(id) {
     deleteProductId = id;
-
-    const modal = new bootstrap.Modal(
-        document.getElementById("deleteModal")
-    );
+    const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
     modal.show();
 }
 
+// Confirm Delete Execution
 async function confirmDeleteProduct() {
-
     try {
-        const response = await fetch(
-            `${API_URL}/${deleteProductId}`,
-            {
-                method: "DELETE"
-            }
-        );
+        const response = await fetch(`${API_URL}/${deleteProductId}`, {
+            method: "DELETE"
+        });
 
-        if (!response.ok) {
-            throw new Error("Delete failed");
-        }
+        if (!response.ok) throw new Error("Delete failed");
 
-        bootstrap.Modal
-            .getInstance(
-                document.getElementById("deleteModal")
-            )
-            .hide();
+        const modalElement = document.getElementById("deleteModal");
+        bootstrap.Modal.getInstance(modalElement).hide();
 
-        showToast(
-            "Product deleted successfully!",
-            "success"
-        );
+        showToast("Product deleted successfully!", "success");
         loadProducts();
-
     } catch (error) {
-        showToast(
-            "Failed to delete product!",
-            "danger"
-        );
+        showToast("Failed to delete product!", "danger");
     }
 }
 
-//edit function
+// Open and populate Edit Modal
 async function editProduct(id) {
+    try {
+        const response = await fetch(`${API_URL}/${id}`);
+        const product = await response.json();
 
-    const response = await fetch(`${API_URL}/${id}`);
+        document.getElementById("editName").value = product.name;
+        document.getElementById("editDescription").value = product.description;
+        document.getElementById("editPrice").value = product.price;
+        document.getElementById("editStockQuantity").value = product.stockQuantity;
 
-    const product = await response.json();
+        editProductId = id;
 
-    document.getElementById("editName").value = product.name;
-
-    document.getElementById("editDescription").value = product.description;
-
-    document.getElementById("editPrice").value = product.price;
-
-    document.getElementById("editStockQuantity").value = product.stockQuantity;
-
-    editProductId = id;
-
-    const modal = new bootstrap.Modal(
-        document.getElementById("editModal")
-    );
-
-    modal.show();
+        const modal = new bootstrap.Modal(document.getElementById("editModal"));
+        modal.show();
+    } catch (error) {
+        console.error("Error fetching product details:", error);
+    }
 }
 
-// sort func
+// Sort features
 function sortProducts(field) {
     if (currentSort.field === field) {
-        currentSort.direction =
-            currentSort.direction === "asc"
-                ? "desc"
-                : "asc";
+        currentSort.direction = currentSort.direction === "asc" ? "desc" : "asc";
     } else {
         currentSort.field = field;
         currentSort.direction = "asc";
     }
 
     products.sort((a, b) => {
-
         let valueA = a[field];
         let valueB = b[field];
 
-        // string compare
         if (typeof valueA === "string") {
-
             valueA = valueA.toLowerCase();
             valueB = valueB.toLowerCase();
 
-            if (valueA < valueB) {
-                return currentSort.direction === "asc"
-                    ? -1
-                    : 1;
-            }
-
-            if (valueA > valueB) {
-                return currentSort.direction === "asc"
-                    ? 1
-                    : -1;
-            }
+            if (valueA < valueB) return currentSort.direction === "asc" ? -1 : 1;
+            if (valueA > valueB) return currentSort.direction === "asc" ? 1 : -1;
             return 0;
         }
-        // number compare
-        return currentSort.direction === "asc"
-            ? valueA - valueB
-            : valueB - valueA;
+        
+        return currentSort.direction === "asc" ? valueA - valueB : valueB - valueA;
     });
 
     renderProductsTable(products);
 }
 
+// Client-side search filters
 function searchProducts() {
-
-    const keyword =
-        document.getElementById("searchInput")
-        .value
-        .toLowerCase();
+    const keyword = document.getElementById("searchInput").value.toLowerCase();
 
     products = allProducts.filter(product =>
-        product.name
-            .toLowerCase()
-            .includes(keyword)
-        ||
-        product.description
-            .toLowerCase()
-            .includes(keyword)
+        (product.name && product.name.toLowerCase().includes(keyword)) ||
+        (product.description && product.description.toLowerCase().includes(keyword))
     );
 
     renderProductsTable(products);
 }
 
+// Initialize application
 loadProducts();
